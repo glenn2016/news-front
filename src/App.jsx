@@ -9,6 +9,7 @@ import { AdminRoute, RedacteurRoute } from './components/ProtectedRoute';
 
 // ─── Pages publiques ──────────────────────────────────────────
 import Home     from './pages/Home';
+import RubriquePage from './pages/RubriquePage';
 import Article  from './pages/Article';
 import Login    from './pages/Login';
 import Register from './pages/Register';
@@ -40,6 +41,8 @@ const App = () => {
       <Route path="/articles/:id" element={<PublicLayout><Article /></PublicLayout>} />
       <Route path="/login"    element={<PublicLayout><Login /></PublicLayout>} />
       <Route path="/register" element={<PublicLayout><Register /></PublicLayout>} />
+      <Route path="/rubrique/:slug" element={<PublicLayout><RubriquePage /></PublicLayout>} />
+
 
       {/* ─── Dashboard ─── */}
       <Route

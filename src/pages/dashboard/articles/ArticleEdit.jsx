@@ -5,6 +5,7 @@ import { useRubriques } from '../../../hooks/useRubriques';
 import Input from '../../../components/ui/Input';
 import Button from '../../../components/ui/Button';
 import Spinner from '../../../components/ui/Spinner';
+import ImageUpload from '../../../components/ui/ImageUpload';
 
 const ArticleEdit = () => {
   const { id }   = useParams();
@@ -85,9 +86,13 @@ const ArticleEdit = () => {
       )}
 
       <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 flex flex-col gap-6">
+        
+        {/* Images */}
 
-        <Input label="Titre" name="titre" value={form.titre} onChange={handleChange} error={errors.titre} />
-
+        <ImageUpload
+          value={form.imagePrincipale}
+          onChange={(url) => setForm((prev) => ({ ...prev, imagePrincipale: url }))}
+        />
         {/* Rubrique */}
         <div className="flex flex-col gap-1">
           <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Rubrique</label>

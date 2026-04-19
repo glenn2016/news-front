@@ -4,6 +4,7 @@ import { useCreateArticle } from '../../../hooks/useArticles';
 import { useRubriques } from '../../../hooks/useRubriques';
 import Input from '../../../components/ui/Input';
 import Button from '../../../components/ui/Button';
+import ImageUpload from '../../../components/ui/ImageUpload';
 
 const ArticleCreate = () => {
   const navigate = useNavigate();
@@ -64,9 +65,20 @@ const ArticleCreate = () => {
       {/* ─── Erreur API ─── */}
       {error && (
         <div className="p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
-          <p className="text-sm text-red-600 dark:text-red-400">
+          <p className="text-sm font-semibold text-red-600 dark:text-red-400 mb-2">
             {error.response?.data?.message || 'Une erreur est survenue.'}
           </p>
+
+          {/* ← Affiche les erreurs de validation Zod */}
+          {error.response?.data?.errors?.length > 0 && (
+            <ul className="list-disc list-inside flex flex-col gap-1">
+              {error.response.data.errors.map((err, i) => (
+                <li key={i} className="text-xs text-red-500 dark:text-red-400">
+                  <span className="font-semibold">{err.field}</span> : {err.message}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
 
@@ -119,12 +131,9 @@ const ArticleCreate = () => {
         </div>
 
         {/* Image */}
-        <Input
-          label="Image principale (URL)"
-          name="imagePrincipale"
-          placeholder="https://exemple.com/image.jpg"
+        <ImageUpload
           value={form.imagePrincipale}
-          onChange={handleChange}
+          onChange={(url) => setForm((prev) => ({ ...prev, imagePrincipale: url }))}
         />
 
         {/* Contenu */}
