@@ -6,7 +6,7 @@ const ThemeContext = createContext();
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(getInitialTheme);
 
-  // Applique la classe dark sur <html>
+  // ─── Applique la classe dark sur <html> ───────────────────
   useEffect(() => {
     const root = document.documentElement;
     if (theme === 'dark') {
@@ -14,30 +14,22 @@ export const ThemeProvider = ({ children }) => {
     } else {
       root.classList.remove('dark');
     }
-    localStorage.setItem('theme', theme);
   }, [theme]);
 
-  // Vérifie l'heure toutes les minutes pour switcher auto
+  // ─── Écoute les changements système ───────────────────────
   useEffect(() => {
-    const interval = setInterval(() => {
-      const saved = localStorage.getItem('theme');
-      if (!saved) {
-        const hour = new Date().getHours();
-        setTheme(hour >= 18 || hour < 6 ? 'dark' : 'light');
-      }
-    }, 60 * 1000);
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-    return () => clearInterval(interval);
+    const handleChange = (e) => {
+      setTheme(e.matches ? 'dark' : 'light');
+    };
+
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
-  const toggleTheme = () => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme); // sauvegarde le choix manuel
-  };
-
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme }}>
       {children}
     </ThemeContext.Provider>
   );
